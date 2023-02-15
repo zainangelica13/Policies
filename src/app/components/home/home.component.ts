@@ -5,6 +5,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ApicallService } from 'src/app/services/apicall.service';
 import { User } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
 
 const states = [
 	'Alabama',
@@ -18,10 +19,11 @@ const states = [
 })
 export class HomeComponent {
   	selectedSummary = 'total';
-	name = 'SiddAjmera';
+	searchValue = '';
   	public model: any;
-	public user: any;
-	public id: any;
+	public username: any;
+	public useremail: any;
+	public userid: any;
 	public jsonData: any;
 	public deviceArray: any;
 	public totalPolicy: any;
@@ -29,32 +31,33 @@ export class HomeComponent {
 	public fPaymentPolicy: any;
 	public data: Object[] = [];
 	public jsonData2: any;
+	public jsonData3: any;
+	public count: any;
+	page = 1;
   
 
-	constructor(private readonly http: HttpClient, private appService: ApicallService) {
-		this.user = this.appService.userEmail;
-		this.id = this.appService.userID;
+	constructor(private _route:Router, private readonly http: HttpClient, private appService: ApicallService) {
 
+		if(!this.appService.userName && !this.appService.userEmail && !this.appService.userID) {
+			this._route.navigate(["login"]);
+		}
+		
+		this.username = this.appService.userName;
+		this.useremail = this.appService.userEmail;
+		this.userid = this.appService.userID;
 		this.summary();
 	}
 
-	search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-		text$.pipe(
-			debounceTime(200),
-			distinctUntilChanged(),
-			map((term) =>
-				term.length < 2 ? [] : states.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-			),
-		);
-
   	useLanguage(summary: string) {
-    	// this.translate.use(language);
     	this.selectedSummary = summary;
 		this.data = [];
 		this.jsonData2 = this.summary();
-		
-		
   	}
+
+	logout(){
+		localStorage.clear();
+		this._route.navigate(["login"]);
+	}
 
 	summary(){
 		this.appService.policies().subscribe((res) => {
@@ -64,7 +67,7 @@ export class HomeComponent {
 
 			//total
 			const policy = this.jsonData.find((a:any)=> {
-				if(a.clientId === this.id) {
+				if(a.clientId === this.userid) {
 					total++;
 					if(a.installmentPayment === true) {
 						ins++;
@@ -87,6 +90,7 @@ export class HomeComponent {
 			this.totalPolicy = total;
 			this.insPolicy = ins;
 			this.fPaymentPolicy = fpayment;
+			this.count = this.selectedSummary == "total" ? this.totalPolicy : this.selectedSummary == "installment" ? this.insPolicy : this.fPaymentPolicy;
 			
 		  }, err => {
 			alert("Something went wrong");

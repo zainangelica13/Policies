@@ -12,8 +12,12 @@ import { ApicallService } from 'src/app/services/apicall.service';
 export class LoginPageComponent implements OnInit {
   public jsonData: any;
   public deviceArray: any;
+  public isTrue: any;
 
   constructor(private _route:Router, private http: HttpClient, private appService: ApicallService) {
+    if(this.appService.userName && this.appService.userEmail && this.appService.userID) {
+			this._route.navigate(["home"]);
+		}
   }
   
   login:FormGroup|any;
@@ -34,8 +38,9 @@ export class LoginPageComponent implements OnInit {
         if (user) {
           alert("You are successfully login");
           localStorage.setItem('email', JSON.stringify(this.login.value.email));
-          this.getID(this.login.value.email);
+          this.getInformation(this.login.value.email);
           this.login.reset();
+          this.isTrue = true;
           this._route.navigate(["home"]);
         } else {
           alert("User Not Found");
@@ -46,19 +51,17 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
-  getID(email: string){
+  getInformation(email: string){
     this.appService.account().subscribe((res) => {
       this.deviceArray = res;
       this.jsonData = this.deviceArray['clients'];
 
-      const user = this.jsonData.find((a:any)=> {
+      this.jsonData.find((a:any)=> {
         if(a.email === email) {
-           return a.id;
+          localStorage.setItem('id', JSON.stringify(a.id));
+          localStorage.setItem('name', JSON.stringify(a.name));
         }
       });
-      if (user) {
-        localStorage.setItem('id', JSON.stringify(user.id));
-      } 
     }, err => {
       alert("Something went wrong");
     });

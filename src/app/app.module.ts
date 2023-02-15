@@ -9,19 +9,25 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupPageComponent } from './components/signup-page/signup-page.component';
+import { SearchFilterPipe } from './controller/search-filter.pipe';
+import { AlertComponent } from './alert';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     HomeComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    SearchFilterPipe,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

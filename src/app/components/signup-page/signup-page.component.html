@@ -448,9 +448,22 @@
        <h3><b>Register</b> Your Account</h3>
         <form [formGroup]="signup" (ngSubmit)="registerData(signup)">
           <div class="form">
-            <input  required  type="text" class="form-control" formControlName="id" placeholder="ID" id="id">
-            <input  required  type="text" class="form-control" formControlName="email" placeholder="Email Address" id="email">
-            <input  type="password" class="form-control" formControlName="password" placeholder="Password" id="pass">
+            <input  required  type="text" class="form-control" formControlName="id" [ngClass]="{'is-invalid':submitted && signup.controls.id.errors}" placeholder="ID" id="id">
+            <div *ngIf="(signup.controls.id.invalid && signup.controls.id.touched) || signup.controls.id.dirty">
+              <small *ngIf="signup.controls.id.errors?.required" class="text-danger">ID is required</small>
+            </div>
+            <input  required  type="text" class="form-control" formControlName="email" [ngClass]="{'is-invalid':submitted && signup.controls.email.errors}" placeholder="Email Address" id="email">
+            <div *ngIf="(signup.controls.email.invalid && signup.controls.email.touched) || signup.controls.email.dirty">
+              <small *ngIf="signup.controls.email.errors?.required" class="text-danger">Email Address is required</small>
+              <small *ngIf="signup.controls.email.errors?.pattern" class="text-danger">Please provide a valid email address</small>
+            </div>
+            <input  required type="password" class="form-control" formControlName="password" [ngClass]="{'is-invalid':submitted && signup.controls.password.errors}" placeholder="Password" id="pass">
+            <div *ngIf="(signup.controls.password.invalid && signup.controls.password.touched) || signup.controls.password.dirty">
+              <small *ngIf="signup.controls.password.errors?.required" class="text-danger">Password is required</small>
+              <small *ngIf="signup.controls.password.errors?.pattern" class="text-danger">Password should be atleast 8 characters long
+                and should contain one number,one character and one special
+                character</small>
+            </div>
           </div>
           <button class="form-control" type="submit" id="loginBtn">Register</button>
           <a routerLink="/login">Already registered your account?</a>

@@ -9,19 +9,27 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class ApicallService {
+  private userNameSubject: BehaviorSubject<User | null>;
+  public name: Observable<User | null>;
   private userEmailSubject: BehaviorSubject<User | null>;
   public email: Observable<User | null>;
-
   private userIDSubject: BehaviorSubject<User | null>;
   public id: Observable<User | null>;
 
   constructor(private http: HttpClient, private _route:Router) {
-      this.userEmailSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('email')!));
-      this.email = this.userEmailSubject.asObservable();
+    this.userNameSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('name')!));
+    this.name = this.userNameSubject.asObservable();
 
-      this.userIDSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('id')!));
-      this.id = this.userIDSubject.asObservable();
-   }
+    this.userEmailSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('email')!));
+    this.email = this.userEmailSubject.asObservable();
+
+    this.userIDSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('id')!));
+    this.id = this.userIDSubject.asObservable();
+  }
+
+  public get userName() {
+    return this.userNameSubject.value;
+  }
 
   public get userEmail() {
     return this.userEmailSubject.value;
