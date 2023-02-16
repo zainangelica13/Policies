@@ -110,7 +110,7 @@
   }
 
   .summary {
-    height: 7em;
+    height: auto;
     border: 2px solid #eee;
     margin-top: 3em;
     box-shadow: 0 1px 1px rgba(99,100,100, 0.11), 
@@ -148,21 +148,6 @@
     display: flex;
     flex-wrap: wrap;
     margin-left: 5px;
-  }
-
-  .noData {
-    height: 23em!important;
-    margin: 19px 25px 0;
-    box-shadow: 0 1px 1px rgba(99,100,100, 0.11), 
-              0 2px 2px rgba(99,100,100, 0.11), 
-              0 4px 4px rgba(99,100,100, 0.11), 
-              0 6px 8px rgba(99,100,100, 0.11),
-              0 8px 16px rgba(99,100,100, 0.11);
-  }
-
-  .noData .display {
-    align-self: center;
-    margin-left: 45%;
   }
 
   .card-policy {

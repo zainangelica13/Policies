@@ -1,0 +1,83 @@
+
+<div class="toolbar" role="banner">
+    <img
+      class="logo"
+      width="125"
+      alt="Example Logo"
+      src="./assets/images/logo.PNG"
+    />
+  
+    
+      <div class="spacer"></div>
+      <div class="user">
+        <p id="name">Hello, {{username}}</p>
+        <p id="email">{{useremail}}</p>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <a type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+              <img alt="User Logo" src="./assets/images/user.png"/>
+            </a>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem routerLink="/home" *ngIf="userrole === 'admin'">Home</button>
+              <button ngbDropdownItem (click)="logout()">Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="content" role="main">
+    <div>
+      <div class="information">
+        <h2>Policies</h2>
+        <p>Detailed list of clients policies</p>
+      </div>
+
+      <div class="filter">
+        <img alt="search Logo" src="./assets/images/search.png"/>
+        <input id="typeahead-basic" type="text" class="form-control" placeholder="Search" name="searchValue" [(ngModel)]="searchValue" />
+      </div>
+
+      <div class="filter">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+            {{accountType}}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="ChangeAccountType('All')">All</button>
+            <button ngbDropdownItem (click)="ChangeAccountType('Admin')">Admin</button>
+            <button ngbDropdownItem (click)="ChangeAccountType('User')">User</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="summary">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col" (click)="onSort('name')">Name</th>
+                    <th scope="col" (click)="onSort('email')">Email</th>
+                    <th scope="col" (click)="onSort('role')">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of clientList | slice: (page-1) * 20 : (page-1) * 20 + 20 | sortType: order:inOrder | searchFilter: searchValue:'clients'; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td> {{ user.id }} </td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+    <ngb-pagination class="d-flex justify-content-end pagination" [collectionSize]="count" [pageSize]="20" [rotate]="true" [(page)]="page" [boundaryLinks]="true"></ngb-pagination>
+  </div>
+  
+  

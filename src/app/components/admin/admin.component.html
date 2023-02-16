@@ -1,0 +1,98 @@
+
+<div class="toolbar" role="banner">
+    <img
+      class="logo"
+      width="125"
+      alt="Example Logo"
+      src="./assets/images/logo.PNG"
+    />
+  
+    
+      <div class="spacer"></div>
+      <div class="user">
+        <p id="name">Hello, {{useremail}}</p>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <a type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+              <img alt="User Logo" src="./assets/images/user.png"/>
+            </a>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="logout()">Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="content" role="main">
+    <div>
+      <div class="information">
+        <h2>Policies</h2>
+        <p>Detailed list of clients policies</p>
+      </div>
+
+      <div class="filter">
+        <img alt="search Logo" src="./assets/images/search.png"/>
+        <input id="typeahead-basic" type="text" class="form-control" placeholder="Search" name="searchValue" [(ngModel)]="searchValue" />
+      </div>
+    </div>
+  
+    <div class="summary">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" (click)="onSort('email')">Email</th>
+                    <th scope="col" (click)="onSort('password')">Password</th>
+                    <th scope="col" (click)="onSort('password')" id="editHead">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of userList | slice: (page-1) * 20 : (page-1) * 20 + 20 | sortType: order:inOrder | searchFilter: searchValue:'clients'; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>
+                        <div *ngIf="!user.isEdit">
+                            {{ user.email }}
+                        </div>
+                        <div *ngIf="user.isEdit">
+                            <input type="text" class="form-control" required name="email" [(ngModel)]="user.email"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="!user.isEdit">
+                            {{ user.password }}
+                        </div>
+                        <div *ngIf="user.isEdit">
+                            <input type="text" class="form-control" required name="password" [(ngModel)]="user.password"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="!user.isEdit" class="editable">
+                            <div class="col-md-6 text-right" >
+                                <img alt="Edit Logo" src="./assets/images/edit.png" aria-hidden="true" (click)="getUser(user)" />
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <img alt="Delete Logo" src="./assets/images/delete.png" aria-hidden="true" (click)="deleteUser(user)" />
+                            </div>
+                        </div>
+                        <div *ngIf="user.isEdit" class="editable">
+                            <div class="col-md-6 text-right">
+                                <img alt="Save Logo" src="./assets/images/save.png" aria-hidden="true" (click)="saveUser(user)" />
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <img alt="Close Logo" src="./assets/images/close.png" aria-hidden="true" (click)="close(user)" />
+                            </div>
+                        </div>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+    <ngb-pagination class="d-flex justify-content-end pagination" [collectionSize]="count" [pageSize]="20" [rotate]="true" [(page)]="page" [boundaryLinks]="true"></ngb-pagination>
+  </div>
+  
+  

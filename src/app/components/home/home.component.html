@@ -20,6 +20,7 @@
               <img alt="User Logo" src="./assets/images/user.png"/>
             </a>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem routerLink="/account" *ngIf="userrole === 'admin'">Account</button>
               <button ngbDropdownItem (click)="logout()">Logout</button>
             </div>
           </div>
@@ -28,23 +29,45 @@
   </div>
   
   <div class="content" role="main">
-  
-  
-    <!-- Resources -->
     <div>
       <div class="information">
         <h2>Policies</h2>
         <p>Detailed list of clients policies</p>
       </div>
-  
-      <div class="search">
+
+      <div class="filter">
         <img alt="search Logo" src="./assets/images/search.png"/>
         <input id="typeahead-basic" type="text" class="form-control" placeholder="Search" name="searchValue" [(ngModel)]="searchValue" />
+      </div>
+
+      <div class="filter">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+            {{order}}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="ChangeOrderBy('Email')">Email</button>
+            <button ngbDropdownItem (click)="ChangeOrderBy('Amount')">Amount</button>
+            <button ngbDropdownItem (click)="ChangeOrderBy('Date')">Date</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+            {{sort}}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="ChangeSortBy('Ascending')">Ascending</button>
+            <button ngbDropdownItem (click)="ChangeSortBy('Descending')">Descending</button>
+          </div>
+        </div>
       </div>
     </div>
   
     <div class="summary">
-      <a class="total active" target="_blank" rel="noopener" [class.active]="selectedSummary==='total'" (click)="useLanguage('total')">
+      <a class="total active" target="_blank" rel="noopener" [class.active]="selectedSummary==='total'" (click)="nav('total')">
         <div class="display">
           <img alt="Total Logo" src="./assets/images/total.png"/>
           <span><b>{{totalPolicy}}</b></span>
@@ -52,7 +75,7 @@
         
         <span>TOTAL</span>
       </a> 
-      <a class="total" target="_blank" rel="noopener" [class.active]="selectedSummary==='installment'" (click)="useLanguage('installment')">
+      <a class="total" target="_blank" rel="noopener" [class.active]="selectedSummary==='installment'" (click)="nav('installment')">
         <div class="display">
           <img alt="Installment Logo" src="./assets/images/installment.png"/>
           <span><b>{{insPolicy}}</b></span>
@@ -60,7 +83,7 @@
         
         <span>INSTALLMENT</span>
       </a>
-      <a class="total" target="_blank" rel="noopener" [class.active]="selectedSummary==='fullpayment'" (click)="useLanguage('fullpayment')">
+      <a class="total" target="_blank" rel="noopener" [class.active]="selectedSummary==='fullpayment'" (click)="nav('fullpayment')">
         <div class="display">
           <img alt="Fullpayment Logo" src="./assets/images/full-payment.png"/>
           <span><b>{{fPaymentPolicy}}</b></span>
@@ -71,7 +94,7 @@
     </div>
   
     <div class="policies-container">
-        <a class="card-policy" target="_blank" rel="noopener" href="https://angular.io/tutorial"  *ngFor="let policy of this.jsonData2 | slice: (page-1) * 25 : (page-1) * 25 + 25 | searchFilter: searchValue">
+        <a class="card-policy" *ngFor="let policy of this.policyData | slice: (page-1) * 25 : (page-1) * 25 + 25 | searchFilter: searchValue:'policies' | sortFilter: order:sort">
           <div id="type" [class.installment]="policy.installmentPayment===true"></div>
           <div>
             <h6>{{policy.email}}</h6>
@@ -80,6 +103,7 @@
           </div>
         </a>
     </div>
+
     <ngb-pagination class="d-flex justify-content-end pagination" [collectionSize]="count" [pageSize]="25" [rotate]="true" [(page)]="page" [boundaryLinks]="true"></ngb-pagination>
   </div>
   

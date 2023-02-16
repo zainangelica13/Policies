@@ -15,6 +15,8 @@ export class ApicallService {
   public email: Observable<User | null>;
   private userIDSubject: BehaviorSubject<User | null>;
   public id: Observable<User | null>;
+  private userRoleSubject: BehaviorSubject<User | null>;
+  public role: Observable<User | null>;
 
   constructor(private http: HttpClient, private _route:Router) {
     this.userNameSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('name')!));
@@ -25,6 +27,9 @@ export class ApicallService {
 
     this.userIDSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('id')!));
     this.id = this.userIDSubject.asObservable();
+
+    this.userRoleSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('role')!));
+    this.role = this.userRoleSubject.asObservable();
   }
 
   public get userName() {
@@ -37,6 +42,10 @@ export class ApicallService {
 
   public get userID() {
     return this.userIDSubject.value;
+  }
+
+  public get userRole() {
+    return this.userRoleSubject.value;
   }
 
   account() {

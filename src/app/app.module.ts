@@ -11,6 +11,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupPageComponent } from './components/signup-page/signup-page.component';
 import { SearchFilterPipe } from './controller/search-filter.pipe';
 import { AlertComponent } from './alert';
+import { SortFilterPipe } from './controller/sort-filter.pipe';
+import { UserListComponent } from './components/account/user-list/user-list.component';
+import { SortTypePipe } from './controller/sort-type.pipe';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +24,10 @@ import { AlertComponent } from './alert';
     SignupPageComponent,
     SearchFilterPipe,
     AlertComponent,
+    SortFilterPipe,
+    UserListComponent,
+    SortTypePipe,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

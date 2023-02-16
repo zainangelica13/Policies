@@ -1,17 +1,4 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<style>
-  
-</style>
-
-<!-- Toolbar -->
 <div class="toolbar" role="banner">
   <img
     width="125"
@@ -29,7 +16,13 @@
       <form [formGroup]="login" (ngSubmit)="loginData(login)">
         <div class="form">
           <input  required  type="text" class="form-control" formControlName="email" placeholder="Email Address" id="email">
+          <div *ngIf="(login.controls.email.invalid && login.controls.email.touched) || login.controls.email.dirty">
+            <small *ngIf="login.controls.email.errors?.required" class="text-danger">Email Address is required</small>
+          </div>
           <input  type="password" class="form-control" formControlName="password" placeholder="Password" id="pass">
+          <div *ngIf="(login.controls.password.invalid && login.controls.password.touched) || login.controls.password.dirty">
+            <small *ngIf="login.controls.password.errors?.required" class="text-danger">Password is required</small>
+          </div>
         </div>
         <button class="form-control" type="submit" id="loginBtn">Login</button>
         <a routerLink="/signup">Register Account</a>

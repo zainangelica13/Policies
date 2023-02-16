@@ -30,7 +30,8 @@ export class SignupPageComponent {
     this.signup = this.formBuilder.group({
       id:['', Validators.required],
       email:['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      password:['', [Validators.required, Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}")]]
+      password:['', [Validators.required, Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}")]],
+      confirmpassword:['', [Validators.required, Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}")]]
     })
   }
 
@@ -45,40 +46,42 @@ export class SignupPageComponent {
     
     this.alertService.clear();
     
-    this.appService.account().subscribe((res) => {
-      this.deviceArray = res;
-      this.jsonData = this.deviceArray['clients'];
+    if(this.signup.value.password === this.signup.value.confirmpassword) {
+      this.appService.account().subscribe((res) => {
 
-      const user = this.jsonData.find((a:any)=> { 
-        return a.email === this.useremail && a.id === this.userid
-      });
+        const user = res['clients'].find((a:any)=> { 
+          return a.email === this.useremail && a.id === this.userid
+        });
 
-      if (user) {
-        this.appService.users().subscribe(res => {
-          const duplicate = res.find((a:any) => {
-            return a.email === this.useremail;
-          });
-
-          if (!duplicate) {
-            this.http.post<any>("http://localhost:3000/users", this.signup.value)
-              .subscribe(res => {
-                  this.alertService.success('Registration successful', { keepAfterRouteChange: true });
-                  this.signup.reset();
-                  this._route.navigate(["login"]);
-              }, err => {
-                this.signup.reset();
-                this.alertService.error(err);
+        if (user) {
+            this.appService.users().subscribe(res => {
+              const duplicate = res.find((a:any) => {
+                return a.email === this.useremail;
               });
-          } else {
-            this.signup.reset();
-            this.alertService.error("This email is already registered!");
-          }
-        })
-      } else {
-        this.alertService.error("ID: " + this.userid + "is not on account list!");
-      }
-    }, err => {
-      this.alertService.error(err);
-    });
+
+              if (!duplicate) {
+                  this.http.post<any>("http://localhost:3000/users", this.signup.value)
+                  .subscribe(res => {
+                      this.alertService.success('Registration successful', { keepAfterRouteChange: true });
+                      this.signup.reset();
+                      this._route.navigate(["login"]);
+                  }, err => {
+                    this.signup.reset();
+                    this.alertService.error(err);
+                  });
+              } else {
+                this.signup.reset();
+                this.alertService.error("This email is already registered!");
+              }
+            })
+        } else {
+          this.alertService.error("ID: " + this.userid + "is not on account list!");
+        }
+      }, err => {
+        this.alertService.error(err);
+      });
+    } else {
+      this.alertService.error("Password and Confirm Password did not match!");
+    }
   }
 }
